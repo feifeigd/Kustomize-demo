@@ -5,6 +5,7 @@ namespace: demo-dev
 namePrefix: dev-
 
 resources:
+  - namespace.yaml
   - ../../base
 
 images:
@@ -16,4 +17,3 @@ patches:
     target:
       kind: Deployment
       name: hello-kustomize
-
