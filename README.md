@@ -51,6 +51,67 @@ kubectl apply -k .\overlays\dev
 kubectl apply -k .\overlays\prod
 ```
 
+## 安装 flannel
+
+如果 Pod 一直卡在 `ContainerCreating`，并且事件里有类似：
+
+```text
+failed to load flannel 'subnet.env' file: open /run/flannel/subnet.env: no such file or directory
+```
+
+说明集群的 flannel CNI 没正常安装或没正常运行。可以执行：
+
+```powershell
+.\scripts\install-flannel.ps1
+```
+
+跳过确认提示：
+
+```powershell
+.\scripts\install-flannel.ps1 -Yes
+```
+
+安装后检查：
+
+```powershell
+kubectl get pods -n kube-flannel -o wide
+kubectl get nodes -o wide
+kubectl get pods -n demo-dev
+```
+
+Ubuntu/Linux 环境使用：
+
+```bash
+chmod +x scripts/install-flannel.sh
+./scripts/install-flannel.sh
+```
+
+跳过确认提示：
+
+```bash
+AUTO_YES=true ./scripts/install-flannel.sh
+```
+
+## Ubuntu 安装最新版 Kubernetes
+
+脚本会先卸载旧的 `kubelet`、`kubeadm`、`kubectl`，再按 Kubernetes 官方 `pkgs.k8s.io` 仓库安装最新 stable 版本。
+
+```bash
+sudo bash scripts/install-latest-k8s-ubuntu.sh
+```
+
+跳过确认提示：
+
+```bash
+AUTO_YES=true sudo -E bash scripts/install-latest-k8s-ubuntu.sh
+```
+
+只安装组件，不执行 `kubeadm init`：
+
+```bash
+INIT_CLUSTER=false sudo -E bash scripts/install-latest-k8s-ubuntu.sh
+```
+
 ## 你应该观察什么
 
 `dev` 输出里：
@@ -66,4 +127,3 @@ kubectl apply -k .\overlays\prod
 - Deployment 名字带 `prod-` 前缀
 - replicas 是 `3`
 - nginx 镜像 tag 是 `1.27-alpine`
-
