@@ -2,6 +2,10 @@ apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 
 namespace: demo-dev
+
+# namePrefix is used to add a prefix to the names of all resources in this kustomization. 
+# This is useful for distinguishing between different environments (e.g., dev, staging, prod) 
+# when deploying the same set of resources.
 namePrefix: dev-
 
 resources:
